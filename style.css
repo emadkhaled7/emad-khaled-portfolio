@@ -143,6 +143,7 @@ button {
     border: none;
     color: white;
     font-size: 22px;
+    cursor: pointer;
 }
 
 .section {
@@ -202,6 +203,7 @@ button {
 .availability span {
     width: 7px;
     height: 7px;
+    flex-shrink: 0;
     border-radius: 50%;
     background: #61e294;
     box-shadow: 0 0 10px #61e294;
@@ -263,6 +265,7 @@ button {
 .secondary-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     padding: 14px 22px;
     border-radius: 10px;
@@ -317,6 +320,7 @@ button {
 .hero-image {
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 .image-wrapper {
@@ -343,6 +347,7 @@ button {
     position: relative;
     z-index: 2;
     overflow: hidden;
+    flex-shrink: 0;
     border-radius: 50%;
     border: 2px solid rgba(255,255,255,0.25);
     background: rgba(255,255,255,0.03);
@@ -729,6 +734,7 @@ button {
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 12px;
     transition: 0.3s;
+    min-width: 0;
 }
 
 .contact-item:hover {
@@ -739,6 +745,7 @@ button {
 .contact-icon {
     width: 42px;
     height: 42px;
+    min-width: 42px;
     display: grid;
     place-items: center;
     border-radius: 10px;
@@ -760,6 +767,7 @@ button {
 .contact-item span {
     font-size: 12px;
     color: #c5c5ce;
+    overflow-wrap: anywhere;
 }
 
 .contact-socials {
@@ -861,6 +869,21 @@ footer strong {
     transform: translateY(0);
 }
 
+@media (max-width: 1100px) {
+    .hero {
+        grid-template-columns: 1fr 0.8fr;
+        gap: 25px;
+    }
+
+    .hero h1 {
+        font-size: clamp(60px, 7vw, 85px);
+    }
+
+    .image-wrapper {
+        transform: scale(0.9);
+    }
+}
+
 @media (max-width: 900px) {
 
     .navbar {
@@ -898,12 +921,22 @@ footer strong {
     }
 
     .hero {
-        grid-template-columns: 1fr;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
         text-align: center;
-        padding-top: 140px;
+        padding-top: 115px;
+        gap: 20px;
+    }
+
+    .hero-image {
+        order: -1;
+        margin: 0 auto;
     }
 
     .hero-content {
+        width: 100%;
+        max-width: 700px;
         margin: auto;
     }
 
@@ -917,12 +950,10 @@ footer strong {
         justify-content: center;
     }
 
-    .hero-image {
-        margin-top: 30px;
-    }
-
     .image-wrapper {
-        transform: scale(0.85);
+        transform: scale(0.8);
+        margin-top: -20px;
+        margin-bottom: -45px;
     }
 
     .scroll-indicator {
@@ -955,31 +986,78 @@ footer strong {
 @media (max-width: 600px) {
 
     .section {
-        padding: 100px 6%;
+        padding: 90px 6%;
+    }
+
+    .hero {
+        padding-top: 105px;
+        gap: 10px;
+    }
+
+    .availability {
+        margin-bottom: 20px;
+        max-width: 100%;
     }
 
     .hero h1 {
-        font-size: 65px;
+        font-size: clamp(52px, 16vw, 68px);
         letter-spacing: -4px;
     }
 
     .hero h2 {
-        font-size: 20px;
+        font-size: 19px;
+        margin-top: 20px;
+    }
+
+    .hero-description {
+        font-size: 14px;
+        line-height: 1.7;
     }
 
     .hero-buttons {
         flex-direction: column;
+        width: 100%;
+        max-width: 330px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .primary-btn,
     .secondary-btn {
-        justify-content: center;
+        width: 100%;
     }
 
     .image-wrapper {
-        transform: scale(0.68);
-        margin-top: -30px;
-        margin-bottom: -70px;
+        width: 350px;
+        height: 390px;
+        transform: scale(0.7);
+        margin-top: -50px;
+        margin-bottom: -75px;
+    }
+
+    .profile-card {
+        width: 350px;
+        height: 350px;
+    }
+
+    .orbit-one {
+        width: 390px;
+        height: 390px;
+    }
+
+    .orbit-two {
+        width: 430px;
+        height: 230px;
+    }
+
+    .card-one {
+        left: -5px;
+        top: 65px;
+    }
+
+    .card-two {
+        right: -5px;
+        bottom: 55px;
     }
 
     .skills-grid {
@@ -990,9 +1068,14 @@ footer strong {
         grid-template-columns: 1fr 1fr;
     }
 
+    .stat-card {
+        padding: 25px 18px;
+    }
+
     .github-card {
         grid-template-columns: 1fr;
         text-align: center;
+        padding: 30px 22px;
     }
 
     .github-icon {
@@ -1003,8 +1086,43 @@ footer strong {
         gap: 40px;
     }
 
+    .contact-info h3 {
+        font-size: 26px;
+    }
+
+    .large-social {
+        padding: 20px;
+        gap: 13px;
+    }
+
     footer {
         flex-direction: column;
         gap: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .hero h1 {
+        font-size: 49px;
+    }
+
+    .hero h2 {
+        font-size: 17px;
+    }
+
+    .image-wrapper {
+        transform: scale(0.62);
+        margin-top: -60px;
+        margin-bottom: -95px;
+    }
+
+    .about-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .floating-card {
+        padding: 11px 13px;
     }
 }
