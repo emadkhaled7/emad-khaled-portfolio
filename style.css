@@ -870,6 +870,7 @@ footer strong {
 }
 
 @media (max-width: 1100px) {
+
     .hero {
         grid-template-columns: 1fr 0.8fr;
         gap: 25px;
@@ -922,22 +923,31 @@ footer strong {
 
     .hero {
         min-height: auto;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "image"
+            "content";
+        align-items: start;
+        gap: 0;
         text-align: center;
-        padding-top: 115px;
-        gap: 20px;
+        padding-top: 105px;
     }
 
     .hero-image {
-        order: -1;
-        margin: 0 auto;
+        grid-area: image;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin: 0;
+        order: unset;
     }
 
     .hero-content {
+        grid-area: content;
         width: 100%;
         max-width: 700px;
-        margin: auto;
+        margin: 0 auto;
     }
 
     .hero-description {
@@ -951,9 +961,11 @@ footer strong {
     }
 
     .image-wrapper {
+        width: 430px;
+        height: 500px;
         transform: scale(0.8);
-        margin-top: -20px;
-        margin-bottom: -45px;
+        margin-top: -70px;
+        margin-bottom: -100px;
     }
 
     .scroll-indicator {
@@ -990,8 +1002,20 @@ footer strong {
     }
 
     .hero {
-        padding-top: 105px;
-        gap: 10px;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "image"
+            "content";
+        padding-top: 100px;
+        gap: 0;
+    }
+
+    .hero-image {
+        grid-area: image;
+    }
+
+    .hero-content {
+        grid-area: content;
     }
 
     .availability {
@@ -1031,8 +1055,8 @@ footer strong {
         width: 350px;
         height: 390px;
         transform: scale(0.7);
-        margin-top: -50px;
-        margin-bottom: -75px;
+        margin-top: -65px;
+        margin-bottom: -80px;
     }
 
     .profile-card {
@@ -1114,7 +1138,7 @@ footer strong {
 
     .image-wrapper {
         transform: scale(0.62);
-        margin-top: -60px;
+        margin-top: -75px;
         margin-bottom: -95px;
     }
 
