@@ -2,8 +2,8 @@ const typingElement = document.getElementById("typing");
 
 const words = [
     "Flutter Developer",
-    "Computer Science Student",
-    "Mobile App Developer"
+    "Mobile App Developer",
+    "Dart Developer"
 ];
 
 let wordIndex = 0;
@@ -14,158 +14,161 @@ function typeEffect() {
     const currentWord = words[wordIndex];
 
     if (!deleting) {
-        typingElement.textContent =
-            currentWord.substring(0, charIndex + 1);
-
+        typingElement.textContent = currentWord.substring(0, charIndex + 1);
         charIndex++;
 
         if (charIndex === currentWord.length) {
             deleting = true;
-            setTimeout(typeEffect, 1700);
+            setTimeout(typeEffect, 1500);
             return;
         }
-    } else {
-        typingElement.textContent =
-            currentWord.substring(0, charIndex - 1);
 
+        setTimeout(typeEffect, 80);
+    } else {
+        typingElement.textContent = currentWord.substring(0, charIndex - 1);
         charIndex--;
 
         if (charIndex === 0) {
             deleting = false;
-            wordIndex++;
-
-            if (wordIndex >= words.length) {
-                wordIndex = 0;
-            }
+            wordIndex = (wordIndex + 1) % words.length;
+            setTimeout(typeEffect, 400);
+            return;
         }
+
+        setTimeout(typeEffect, 45);
     }
-
-    const speed = deleting ? 45 : 85;
-
-    setTimeout(typeEffect, speed);
 }
 
 typeEffect();
 
-const revealElements =
-    document.querySelectorAll(".reveal");
+const revealElements = document.querySelectorAll(".reveal");
 
-const observer =
-    new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("visible");
-                    observer.unobserve(entry.target);
-                }
-            });
-        },
-        {
-            threshold: 0.12
-        }
-    );
+const observer = new IntersectionObserver(
+    entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    },
+    {
+        threshold: 0.12
+    }
+);
 
-revealElements.forEach((element) => {
-    observer.observe(element);
-});
+revealElements.forEach(element => observer.observe(element));
 
-const menuBtn =
-    document.getElementById("menuBtn");
-
-const navbar =
-    document.querySelector(".navbar");
-
-const menuIcon =
-    menuBtn.querySelector("i");
+const menuBtn = document.querySelector(".menu-btn");
+const navLinks = document.querySelector(".nav-links");
 
 menuBtn.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("mobile-open");
 
-    navbar.classList.toggle("mobile-open");
+    menuBtn.setAttribute("aria-expanded", isOpen);
 
-    if (navbar.classList.contains("mobile-open")) {
-        menuIcon.classList.remove("fa-bars");
-        menuIcon.classList.add("fa-xmark");
-    } else {
-        menuIcon.classList.remove("fa-xmark");
-        menuIcon.classList.add("fa-bars");
-    }
+    menuBtn.innerHTML = isOpen
+        ? '<i class="fa-solid fa-xmark"></i>'
+        : '<i class="fa-solid fa-bars"></i>';
 });
 
-const navLinks =
-    document.querySelectorAll(".nav-link");
-
-navLinks.forEach((link) => {
-
+document.querySelectorAll(".nav-links a").forEach(link => {
     link.addEventListener("click", () => {
-
-        navbar.classList.remove("mobile-open");
-
-        menuIcon.classList.remove("fa-xmark");
-        menuIcon.classList.add("fa-bars");
-
+        navLinks.classList.remove("mobile-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
     });
-
 });
 
-const sections =
-    document.querySelectorAll("section[id]");
+const sections = document.querySelectorAll("section[id]");
+const navigationLinks = document.querySelectorAll(".nav-links a");
 
-window.addEventListener("scroll", () => {
+function updateActiveLink() {
+    const scrollPosition = window.scrollY + 180;
 
-    let current = "";
-
-    sections.forEach((section) => {
-
-        const sectionTop =
-            section.offsetTop - 150;
-
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute("id");
-        }
-
-    });
-
-    navLinks.forEach((link) => {
-
-        link.classList.remove("active");
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute("id");
 
         if (
-            link.getAttribute("href") ===
-            `#${current}`
+            scrollPosition >= sectionTop &&
+            scrollPosition < sectionTop + sectionHeight
         ) {
-            link.classList.add("active");
+            navigationLinks.forEach(link => {
+                link.classList.remove("active");
+
+                if (link.getAttribute("href") === `#${sectionId}`) {
+                    link.classList.add("active");
+                }
+            });
         }
-
     });
+}
 
+window.addEventListener("scroll", updateActiveLink);
+
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll", () => {
+    navbar.classList.toggle("scrolled", window.scrollY > 30);
 });
 
-const heroImage =
-    document.querySelector(".hero-image");
+const heroImage = document.querySelector(".hero-image");
 
-if (window.innerWidth > 900) {
+if (heroImage && window.innerWidth > 900) {
+    document.addEventListener("mousemove", event => {
+        const x = (event.clientX / window.innerWidth - 0.5) * 10;
+        const y = (event.clientY / window.innerHeight - 0.5) * 10;
 
-    document.addEventListener("mousemove", (event) => {
+        heroImage.style.transform = `translate(${x}px, ${y}px)`;
+    });
+}
 
-        const x =
-            (event.clientX / window.innerWidth - 0.5) * 10;
+const cursorGlow = document.querySelector(".cursor-glow");
 
-        const y =
-            (event.clientY / window.innerHeight - 0.5) * 10;
+if (cursorGlow && window.innerWidth > 900) {
+    document.addEventListener("mousemove", event => {
+        cursorGlow.style.left = `${event.clientX}px`;
+        cursorGlow.style.top = `${event.clientY}px`;
+    });
+}
 
-        heroImage.style.transform =
-            `translate(${x}px, ${y}px)`;
+const skillCards = document.querySelectorAll(".skill-card");
 
+skillCards.forEach(card => {
+    card.addEventListener("mousemove", event => {
+        const rect = card.getBoundingClientRect();
+
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const rotateX = (y / rect.height - 0.5) * -5;
+        const rotateY = (x / rect.width - 0.5) * 5;
+
+        card.style.transform =
+            `translateY(-10px) perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     });
 
-}
+    card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+    });
+});
 
-const copyright =
-    document.querySelector(".copyright");
+const certificateCards = document.querySelectorAll(".certificate-card");
 
-if (copyright) {
+certificateCards.forEach(card => {
+    card.addEventListener("mousemove", event => {
+        const rect = card.getBoundingClientRect();
 
-    copyright.textContent =
-        `© ${new Date().getFullYear()} Emad Khaled. All rights reserved.`;
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
 
-}
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+    });
+});
+
+const copyright = document.getElementById("copyright");
+
+copyright.textContent = new Date().getFullYear();
