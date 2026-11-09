@@ -155,18 +155,80 @@ skillCards.forEach(card => {
     });
 });
 
-const certificateCards = document.querySelectorAll(".certificate-card");
+const certificateModal = document.createElement("div");
+
+certificateModal.className = "certificate-modal";
+
+certificateModal.innerHTML = `
+    <div class="certificate-modal-content">
+        <button class="certificate-close" aria-label="Close certificate">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img src="" alt="Certificate Preview">
+        <span class="certificate-modal-hint">Press ESC or click outside to close</span>
+    </div>
+`;
+
+document.body.appendChild(certificateModal);
+
+const modalImage = certificateModal.querySelector("img");
+const closeCertificate = certificateModal.querySelector(".certificate-close");
+const certificateCards = document.querySelectorAll(".certificate-preview");
+
+let lastFocusedElement = null;
+
+function openCertificate(imagePath, card) {
+    lastFocusedElement = card;
+    modalImage.src = imagePath;
+    certificateModal.classList.add("active");
+    document.body.classList.add("modal-open");
+    closeCertificate.focus();
+}
+
+function closeCertificateModal() {
+    certificateModal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+
+    if (lastFocusedElement) {
+        lastFocusedElement.focus();
+    }
+
+    setTimeout(() => {
+        if (!certificateModal.classList.contains("active")) {
+            modalImage.src = "";
+        }
+    }, 350);
+}
 
 certificateCards.forEach(card => {
-    card.addEventListener("mousemove", event => {
-        const rect = card.getBoundingClientRect();
-
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
+    card.addEventListener("click", () => {
+        openCertificate(card.dataset.certificate, card);
     });
+
+    card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openCertificate(card.dataset.certificate, card);
+        }
+    });
+});
+
+closeCertificate.addEventListener("click", closeCertificateModal);
+
+certificateModal.addEventListener("click", event => {
+    if (event.target === certificateModal) {
+        closeCertificateModal();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && certificateModal.classList.contains("active")) {
+        closeCertificateModal();
+    }
+});
+
+modalImage.addEventListener("error", () => {
+    modalImage.alt = "Certificate image could not be loaded";
 });
 
 const copyright = document.getElementById("copyright");
