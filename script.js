@@ -201,7 +201,10 @@ function closeCertificateModal() {
 }
 
 certificateCards.forEach(card => {
-    card.addEventListener("click", () => {
+    card.addEventListener("pointerup", event => {
+        if (!event.isPrimary || event.button !== 0) return;
+
+        event.preventDefault();
         openCertificate(card.dataset.certificate, card);
     });
 
